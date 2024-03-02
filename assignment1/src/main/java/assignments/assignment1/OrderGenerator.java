@@ -1,6 +1,6 @@
 package assignments.assignment1;
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -71,14 +71,14 @@ public class OrderGenerator {
         }
 
         // Reverse dari bilangan ASCII ke character sesuai dengan code 39 character
-        oddSum = oddSum % 36;
+        oddSum = oddSum % 36; // index ganjil
         if (oddSum > 9) {
             oddSum += 55;
             formattedOddSum = String.valueOf((char) oddSum);
         } else {
             formattedOddSum = Integer.toString(oddSum);
         }
-        evenSum = evenSum % 36;
+        evenSum = evenSum % 36; // index genap
         if (evenSum > 9) {
             evenSum += 55;
             formattedEvenSum = String.valueOf((char) evenSum);
@@ -114,7 +114,7 @@ public class OrderGenerator {
         } else {
             hargaOngkir = "60.000";
         }
-
+        
         // Output dari data pesanan
         return "Bill:\n" + //
                 "Order ID: " + inputOrderID + "\n" + 
@@ -208,7 +208,7 @@ public class OrderGenerator {
                         for (int i = 0; i < dataLength; i += 16) {
                             if (inputOrderID.equals(dataOrderID.substring(i, i + 16))) {
                                 // Menyimpan index ke-i yang nantinya akan digunakan untuk mengambil index ke-i pada tanggal
-                                dataIndex = i;
+                                dataIndex = i/16;
                                 found = true;
                                 break;
                             }
