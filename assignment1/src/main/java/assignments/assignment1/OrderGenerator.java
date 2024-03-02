@@ -1,6 +1,6 @@
 package assignments.assignment1;
 
-import java.time.LocalDate; 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -8,8 +8,6 @@ public class OrderGenerator {
     // Inisialisasi variabel
     private static final Scanner input = new Scanner(System.in);
     private static String dataOrderID = "";  
-    private static String dataTanggal = "";
-    private static int dataIndex = 0;
 
     // Method untuk menampilkan daftar menu
     public static void showMenu(){
@@ -101,6 +99,8 @@ public class OrderGenerator {
     // Method untuk menmberikan bill sesuai dengan lokasi, serta output data pesanan
     public static String generateBill(String inputOrderID, String lokasi){
         String hargaOngkir;
+        // Formatting untuk output tanggal pada order ID yang dipilih
+        String outputTanggal = String.format("%s/%s/%s", inputOrderID.substring(4, 6), inputOrderID.substring(6, 8), inputOrderID.substring(8, 12));
 
         // Mengambil harga ongkos kirim sesuai lokasi
         if (lokasi.toUpperCase().equals("P")) {
@@ -118,10 +118,9 @@ public class OrderGenerator {
         // Output dari data pesanan
         return "Bill:\n" + //
                 "Order ID: " + inputOrderID + "\n" + 
-                "Tanggal Pemesanan: " + dataTanggal.substring(dataIndex*10, dataIndex*10+10) + "\n" + 
+                "Tanggal Pemesanan: " + outputTanggal + "\n" + 
                 "Lokasi Pengiriman: " + lokasi.toUpperCase() + "\n" + 
-                "Biaya Ongkos Kirim: Rp " + hargaOngkir;
-
+                "Biaya Ongkos Kirim: Rp " + hargaOngkir + "\n";
     }
 
     // Main program
@@ -131,7 +130,7 @@ public class OrderGenerator {
             String lokasi;
             String inputOrderID;
             String customerOrderID = "";
-            String tempTanggal = "";
+
 
             // Memilih menu
             showMenu();
@@ -163,7 +162,6 @@ public class OrderGenerator {
 
                         // Error handling untuk tanggal pemesanan
                         if (checkDate(tanggalOrder, formatTanggal)) {
-                            tempTanggal += tanggalOrder;
                             System.out.print("No. Telepon: ");
 
                             // Input nomor telepon + error handling untuk nomor telepon
@@ -177,7 +175,6 @@ public class OrderGenerator {
 
                                 // Menyimpan data order ID dan tanggal pada suatu variabel
                                 dataOrderID += customerOrderID;
-                                dataTanggal += tempTanggal;
 
                                 System.out.println("Order ID " + customerOrderID + " diterima!\n");
                                 break;
@@ -208,7 +205,6 @@ public class OrderGenerator {
                         for (int i = 0; i < dataLength; i += 16) {
                             if (inputOrderID.equals(dataOrderID.substring(i, i + 16))) {
                                 // Menyimpan index ke-i yang nantinya akan digunakan untuk mengambil index ke-i pada tanggal
-                                dataIndex = i/16;
                                 found = true;
                                 break;
                             }
@@ -228,7 +224,7 @@ public class OrderGenerator {
 
                     // Error handling pada lokasi pengiriman
                     if ("PUTSB".contains(lokasi) && lokasi.length() == 1) {
-                        System.out.println(generateBill(inputOrderID, lokasi) + "\n");
+                        System.out.println(generateBill(inputOrderID, lokasi));
                         break;
                     } else {
                         System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!\n");
