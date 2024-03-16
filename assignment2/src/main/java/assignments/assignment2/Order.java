@@ -3,6 +3,7 @@ package assignments.assignment2;
 import java.util.ArrayList;
 
 public class Order {
+    // Inisialisasi attribut
     private String orderID;
     private String tanggalPemesanan;
     private int biayaOngkosKirim;
@@ -10,6 +11,7 @@ public class Order {
     private ArrayList<Menu> items;
     private boolean orderFinished;
 
+    // Constructor method
     public Order(String orderID, String tanggalPemesanan, int biayaOngkosKirim, Restaurant restaurant, ArrayList<Menu> items, boolean orderFinished) {
         this.orderID = orderID;
         this.tanggalPemesanan = tanggalPemesanan;
@@ -19,6 +21,7 @@ public class Order {
         this.orderFinished = orderFinished;
     }
 
+    // Getter dan setter method
     public String getOrderID() {
         return orderID;
     }

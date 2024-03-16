@@ -1,14 +1,17 @@
 package assignments.assignment2;
 
 public class Menu {
+    // Inisialisasi attribut
     private String namaMakanan;
     private double harga;
 
+    // Constructor method
     public Menu(String namaMakanan, double harga) {
         this.namaMakanan = namaMakanan;
         this.harga = harga;
     }
 
+    // Getter dan setter method
     public String getNamaMakanan() {
         return namaMakanan;
     }

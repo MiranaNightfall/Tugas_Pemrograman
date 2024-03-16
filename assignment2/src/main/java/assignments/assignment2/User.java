@@ -3,6 +3,7 @@ package assignments.assignment2;
 import java.util.ArrayList;
 
 public class User {
+    // Inisialisasi variabel
     private String nama;
     private String nomorTelepon;
     private String email;
@@ -10,6 +11,7 @@ public class User {
     private String role;
     private ArrayList<Order> orderHistory;
 
+    // Constructor method
     public User(String nama, String nomorTelepon, String email, String lokasi, String role) {
         this.nama = nama;
         this.nomorTelepon = nomorTelepon;
@@ -19,6 +21,7 @@ public class User {
         this.orderHistory = new ArrayList<>();
     }
 
+    // Getter dan setter method
     public ArrayList<Order> getOrderHistory() {
         return orderHistory;
     }

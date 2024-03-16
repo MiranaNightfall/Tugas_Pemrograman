@@ -3,14 +3,17 @@ package assignments.assignment2;
 import java.util.ArrayList;
 
 public class Restaurant {
+    // Inisialisasi attribut
     private String nama;
     private ArrayList<Menu> menu;
 
+    // Constructor method
     public Restaurant(String nama, ArrayList<Menu> menu) {
         this.nama = nama;
         this.menu = menu;
     }
 
+    // Getter dan setter method
     public String getNama() {
         return nama;
     }
@@ -25,12 +28,5 @@ public class Restaurant {
 
     public void setMenu(ArrayList<Menu> menu) {
         this.menu = menu;
-    }
-
-    public void displayMenu() {
-        System.out.println("Menu " + nama + ":");
-        for (Menu item : menu) {
-            System.out.println("- " + item.getNamaMakanan() + ": Rp " + item.getHarga());
-        }
     }
 }
