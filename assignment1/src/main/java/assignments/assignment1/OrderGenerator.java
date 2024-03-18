@@ -7,19 +7,20 @@ import java.util.Scanner;
 public class OrderGenerator {
     // Inisialisasi variabel
     private static final Scanner input = new Scanner(System.in);
+    private static String dataOrderID = "";  
 
     // Method untuk menampilkan daftar menu
     public static void showMenu(){
         System.out.println(">>=======================================<<");
         System.out.println("|| ___                 ___             _ ||");
-        System.out.println("||| . \\ ___  ___  ___ | __>___  ___  _| |||");
+        System.err.println("||| . \\ ___  ___  ___ | __>___  ___  _| |||");
         System.out.println("||| | |/ ._>| . \\/ ._>| _>/ . \\/ . \\/ . |||");
         System.out.println("|||___/\\___.|  _/\\___.|_| \\___/\\___/\\___|||");
         System.out.println("||          |_|                          ||");
         System.out.println(">>=======================================<<");
         System.out.println();
         System.out.println("Pilih menu:");
-        System.out.println("1. Generate Order ID");
+        System.err.println("1. Generate Order ID");
         System.out.println("2. Generate Bill");
         System.out.println("3. Keluar");
     }
@@ -128,6 +129,8 @@ public class OrderGenerator {
             // Inisialisasi variabel
             String lokasi;
             String inputOrderID;
+            String customerOrderID = "";
+
 
             // Memilih menu
             showMenu();
@@ -151,36 +154,38 @@ public class OrderGenerator {
                     // Error handling untuk nama restoran
                     if (namaRestoran.length() < 4) {
                         System.out.println("Nama restoran tidak valid!\n");
-                        continue;
-                    }
-
-                    // Input tanggal pemesanan
-                    System.out.print("Tanggal Pemesanan: ");
-                    tanggalOrder = input.nextLine();
-                    DateTimeFormatter formatTanggal = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-                    // Error handling untuk tanggal pemesanan
-                    if (checkDate(tanggalOrder, formatTanggal) == false) {
-                        System.out.println("Tanggal pemesanan dalam format DD/MM/YYYY!\n");
-                        continue;
-                    }
-                    
-                    System.out.print("No. Telepon: ");
-
-                    // Input nomor telepon + error handling untuk nomor telepon
-                    if (input.hasNextLong()) {
-                        inputNoTelepon = input.nextLong();
-                        input.nextLine();
-                        String noTelepon = Long.toString(inputNoTelepon);
-
-                        // Output dari order ID yang telah dibuat
-                        System.out.println("Order ID " + generateOrderID(inputNamaRestoran, tanggalOrder, noTelepon) + " diterima!\n");
-                        break;
                     } else {
-                        System.out.println("Harap masukkan nomor telepon dalam bentuk bilangan bulat positif.\n");
-                        input.nextLine();
+                        // Input tanggal pemesanan
+                        System.out.print("Tanggal Pemesanan: ");
+                        tanggalOrder = input.nextLine();
+                        DateTimeFormatter formatTanggal = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                        // Error handling untuk tanggal pemesanan
+                        if (checkDate(tanggalOrder, formatTanggal)) {
+                            System.out.print("No. Telepon: ");
+
+                            // Input nomor telepon + error handling untuk nomor telepon
+                            if (input.hasNextLong()) {
+                                inputNoTelepon = input.nextLong();
+                                input.nextLine();
+
+                                String noTelepon = Long.toString(inputNoTelepon);
+
+                                customerOrderID = generateOrderID(inputNamaRestoran, tanggalOrder, noTelepon);
+
+                                // Menyimpan data order ID dan tanggal pada suatu variabel
+                                dataOrderID += customerOrderID;
+
+                                System.out.println("Order ID " + customerOrderID + " diterima!\n");
+                                break;
+                            } else {
+                                System.out.println("Harap masukkan nomor telepon dalam bentuk bilangan bulat positif.\n");
+                                input.nextLine();
+                            }
+                        } else {
+                            System.out.println("Tanggal pemesanan dalam format DD/MM/YYYY!\n");
+                        }
                     }
-                    
                 }
             } else if (menuInput == 2) { // Menu ke-2 (generate bill)
                 while (true) {
@@ -191,9 +196,25 @@ public class OrderGenerator {
                     // Error handling pada order ID
                     if (inputOrderID.length() != 16) {
                         System.out.println("Order ID harus memiliki 16 karakter.\n");
-                        continue;
+                    } else {
+
+                        boolean found = false;
+                        int dataLength = dataOrderID.length();
+
+                        // Check eksistensi input order ID
+                        for (int i = 0; i < dataLength; i += 16) {
+                            if (inputOrderID.equals(dataOrderID.substring(i, i + 16))) {
+                                // Menyimpan index ke-i yang nantinya akan digunakan untuk mengambil index ke-i pada tanggal
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found) { // Keluar dari loop while apabila True
+                            break;
+                        } else {
+                            System.out.println("Order ID tidak ditemukan.\n");
+                        }
                     }
-                    break;
                 }
 
                 while (true) {
@@ -202,14 +223,13 @@ public class OrderGenerator {
                     lokasi = input.nextLine().toUpperCase();
 
                     // Error handling pada lokasi pengiriman
-                    if (("PUTSB".contains(lokasi) && lokasi.length() == 1) == false) {
+                    if ("PUTSB".contains(lokasi) && lokasi.length() == 1) {
+                        System.out.println(generateBill(inputOrderID, lokasi));
+                        break;
+                    } else {
                         System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!\n");
-                        continue;
                     }
-                    System.out.println(generateBill(inputOrderID, lokasi));
-                    break;
                 }
-                
             } else if (menuInput == 3) {  // Keluar dari menu/program
                 System.out.print("Terima kasih telah menggunakan DepeFood!");
                 break;
