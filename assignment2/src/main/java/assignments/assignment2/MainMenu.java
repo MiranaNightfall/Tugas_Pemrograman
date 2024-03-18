@@ -186,7 +186,7 @@ public class MainMenu {
                 namaMakanan = namaMakanan.trim();
 
                 // Handling apabila makanan adalah string kosong/input menu hanya ada 1 kata
-                if (namaMakanan.equals("")) {
+                if (namaMakanan.equals("") || menuRestoran.stream().map(Menu::getNamaMakanan).anyMatch(namaMakanan::equals)) {
                     System.out.println("Input nama makanan tidak valid\n");
                     isMenuValid = false;
                     break;
@@ -344,24 +344,35 @@ public class MainMenu {
     
     // Method untuk sorting berdasarkan harga. apabila harga sama -> sorting berdasarkan alfabetis
     public static void sortMenu(ArrayList<Menu> menuRestoran, int startIndex) {
-        if (startIndex >= menuRestoran.size() - 1) {
+        if (startIndex >= menuRestoran.size() - 1) { 
             return;
         }
         for (int index1 = startIndex; index1 < menuRestoran.size(); index1++) {
             for (int index2 = index1+1; index2 < menuRestoran.size(); index2++) {
                 Menu menu1 = menuRestoran.get(index1);
                 Menu menu2 = menuRestoran.get(index2);
-
+    
                 /* Apabila ada perbedaan harga -> sort dari yang terkecil
                    Harga sama? urutkan secara alfabetis
                 */
-                if ((menu1.getHarga() == menu2.getHarga() && menu1.getNamaMakanan().compareTo(menu2.getNamaMakanan()) > 0) || (menu1.getHarga() > menu2.getHarga())) {
+                if ((menu1.getHarga() == menu2.getHarga() && compareAscii(menu1.getNamaMakanan(), menu2.getNamaMakanan()) > 0) || (menu1.getHarga() > menu2.getHarga())) {
                     menuRestoran.set(index1, menu2);
                     menuRestoran.set(index2, menu1);
                 }
             }
         }
         sortMenu(menuRestoran, startIndex + 1);
+    }
+    
+    // Method untuk membandingkan nilai ascii pada nama makanan
+    public static int compareAscii(String str1, String str2) {
+        int minLength = Math.min(str1.length(), str2.length());
+        for (int i = 0; i < minLength; i++) {
+            if (str1.charAt(i) != str2.charAt(i)) {
+                return str1.charAt(i) - str2.charAt(i);
+            }
+        }
+        return str1.length() - str2.length();
     }
 
     // Method untuk mengubah status pesanan (role: Customer)
