@@ -9,7 +9,7 @@ public class OrderGenerator {
     private static final Scanner input = new Scanner(System.in);
     private static String dataOrderID = "";  
 
-    // Method untuk menampilkan daftar menu
+    // Method untuk menampilkan daftar menu      
     public static void showMenu(){
         System.out.println(">>=======================================<<");
         System.out.println("|| ___                 ___             _ ||");
