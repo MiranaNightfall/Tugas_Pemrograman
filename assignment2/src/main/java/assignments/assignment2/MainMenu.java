@@ -156,7 +156,7 @@ public class MainMenu {
             
             // Handling apabila nama restoran sudah terdaftar
             if (findRestaurant(namaRestoran) != null) {
-                System.out.println("Restoran dengan nama " + namaRestoran + " sudah pernah terdaftar. Mohon masukkan nama yang berbeda");
+                System.out.println("Restoran dengan nama " + namaRestoran + " sudah pernah terdaftar. Mohon masukkan nama yang berbeda\n");
                 continue;
             }
             
@@ -218,16 +218,19 @@ public class MainMenu {
     // Method untuk menghapus restoran (role: Admin)
     public static void handleHapusRestoran() {
         System.out.println("----------------Hapus Restoran----------------");
-        System.out.print("Nama Restoran: ");
-        String namaRestoran = input.nextLine();
+        while (true) {
+            System.out.print("Nama Restoran: ");
+            String namaRestoran = input.nextLine();
 
-        // Restoran ditemukan ? hapus : "restoran tidak ditemukan"
-        Restaurant restoran = findRestaurant(namaRestoran);
-        if (restoran != null) {
-            restoList.remove(restoran);
-            System.out.println("Restoran berhasil dihapus.");
-        } else {
-            System.out.println("Restoran tidak terdaftar pada sistem.");
+            // Restoran ditemukan ? hapus : "restoran tidak ditemukan"
+            Restaurant restoran = findRestaurant(namaRestoran);
+            if (restoran != null) {
+                restoList.remove(restoran);
+                System.out.println("Restoran berhasil dihapus.");
+                break;
+            } else {
+                System.out.println("Restoran tidak terdaftar pada sistem.");
+            }
         }
     }
 
@@ -292,53 +295,77 @@ public class MainMenu {
     // Method untuk mencetak bill (role: Customer)
     public static void handleCetakBill() {
         System.out.println("----------------Cetak Bill----------------");
-        System.out.print("Masukkan Order ID: ");
-        String orderID = input.nextLine();
-        int totalBiaya = 0;
-        
-        // Apabila order ditemukan -> cetak bill sesuai dengan yang dipesan
-        Order order = findOrder(orderID);
-        if (order != null) {    
-            System.out.println("\nBill:");
-            System.out.println("Order ID: " + order.getOrderID());
-            System.out.println("Tanggal Pemesanan: " + order.getTanggalPemesanan());
-            System.out.println("Restaurant: " + order.getRestaurant().getNama());
-            System.out.println("Lokasi Pengiriman: " + loggedInUser.getLokasi());
-            System.out.print("Status Pengiriman: ");
-            System.out.println(order.isOrderFinished() ? "Selesai" : "Not Finished");
-            System.out.println("Pesanan:");
-            for (Menu item : order.getItems()) {
-                System.out.println("- " + item.getNamaMakanan() + " " + item.getHarga());
-                totalBiaya += item.getHarga();
+        while (true) {
+            System.out.print("Masukkan Order ID: ");
+            String orderID = input.nextLine();
+            double totalBiaya = 0;
+            
+            // Apabila order ditemukan -> cetak bill sesuai dengan yang dipesan
+            Order order = findOrder(orderID);
+            if (order != null) {    
+                System.out.println("\nBill:");
+                System.out.println("Order ID: " + order.getOrderID());
+                System.out.println("Tanggal Pemesanan: " + order.getTanggalPemesanan());
+                System.out.println("Restaurant: " + order.getRestaurant().getNama());
+                System.out.println("Lokasi Pengiriman: " + loggedInUser.getLokasi());
+                System.out.print("Status Pengiriman: ");
+                System.out.println(order.isOrderFinished() ? "Selesai" : "Not Finished");
+                System.out.println("Pesanan:");
+                for (Menu item : order.getItems()) {
+                    // Formatting harga pada setiap menu yang dipesan
+                    String formattedHarga = String.format("%.2f", item.getHarga());
+                    if (formattedHarga.endsWith("0")) {
+                        formattedHarga = String.valueOf((int) item.getHarga());
+                    }
+                    System.out.println("- " + item.getNamaMakanan() + " " + formattedHarga);
+                    totalBiaya += item.getHarga();
+                }
+                System.out.println("Biaya Ongkos Kirim: Rp " + generateBill(loggedInUser));
+                totalBiaya += generateBill(loggedInUser);
+
+                // Formatting harga total biaya
+                String formattedTotalBiaya = String.format("%.2f", totalBiaya);
+                if (formattedTotalBiaya.endsWith("0")) {
+                    formattedTotalBiaya = String.valueOf((int) totalBiaya);
+                }
+                System.out.println("Total Biaya: Rp " + formattedTotalBiaya);
+                break;
+            } else {
+                System.out.println("Order ID tidak dapat ditemukan.\n");
             }
-            System.out.println("Biaya Ongkos Kirim: Rp " + generateBill(loggedInUser));
-            totalBiaya = totalBiaya + generateBill(loggedInUser);
-            System.out.println("Total Biaya: Rp " + totalBiaya);
-        } else {
-            System.out.println("Order dengan ID " + orderID + " tidak ditemukan.");
         }
     }
 
     // Method untuk melihat menu restoran (role: Customer)
     public static void handleLihatMenu() {
         System.out.println("----------------Lihat Menu----------------");
-        System.out.print("Nama Restoran: ");
-        String namaRestoran = input.nextLine();
+        while (true) {
+            System.out.print("Nama Restoran: ");
+            String namaRestoran = input.nextLine();
 
-        // Apabila restoran ditemukan -> tampilkan menu yang ada pada restoran
-        Restaurant restoran = findRestaurant(namaRestoran);
-        if (restoran != null) {
-            ArrayList<Menu> menuRestoran = restoran.getMenu();
+            // Apabila restoran ditemukan -> tampilkan menu yang ada pada restoran
+            Restaurant restoran = findRestaurant(namaRestoran);
+            if (restoran != null) {
+                ArrayList<Menu> menuRestoran = restoran.getMenu();
 
-            // Sorting berdasarkan harga. apabila harga sama -> sorting berdasarkan alfabetis
-            sortMenu(menuRestoran, 0);
-            System.out.println("Menu:");
-            for (int i = 0; i < menuRestoran.size(); i++) {
-                Menu menu = menuRestoran.get(i);
-                System.out.println((i + 1) + ". " + menu.getNamaMakanan() + " " + menu.getHarga());
+                // Sorting berdasarkan harga. apabila harga sama -> sorting berdasarkan alfabetis
+                sortMenu(menuRestoran, 0);
+                System.out.println("Menu:");
+                for (int i = 0; i < menuRestoran.size(); i++) {
+                    Menu menu = menuRestoran.get(i);
+                    double harga = menu.getHarga();
+                    String formattedHarga;
+                    if (harga == (int) harga) {
+                        formattedHarga = String.format("%.0f", harga);
+                    } else {
+                        formattedHarga = String.format("%.2f", harga);
+                    }
+                    System.out.println((i + 1) + ". " + menu.getNamaMakanan() + " " + formattedHarga);
+                }
+                break;
+            } else {
+                System.out.println("Restoran tidak terdaftar pada sistem.\n");
             }
-        } else {
-            System.out.println("Restoran " + namaRestoran + " tidak terdaftar pada sistem.");
         }
     }
     
@@ -355,7 +382,7 @@ public class MainMenu {
                 /* Apabila ada perbedaan harga -> sort dari yang terkecil
                    Harga sama? urutkan secara alfabetis
                 */
-                if ((menu1.getHarga() == menu2.getHarga() && compareAscii(menu1.getNamaMakanan(), menu2.getNamaMakanan()) > 0) || (menu1.getHarga() > menu2.getHarga())) {
+                if ((menu1.getHarga() == menu2.getHarga() && compareMenu(menu1.getNamaMakanan(), menu2.getNamaMakanan()) > 0) || (menu1.getHarga() > menu2.getHarga())) {
                     menuRestoran.set(index1, menu2);
                     menuRestoran.set(index2, menu1);
                 }
@@ -364,44 +391,46 @@ public class MainMenu {
         sortMenu(menuRestoran, startIndex + 1);
     }
     
-    // Method untuk membandingkan nilai ascii pada nama makanan
-    public static int compareAscii(String str1, String str2) {
-        int minLength = Math.min(str1.length(), str2.length());
+    // Method untuk membandingkan menu makanan berdasarkan alfabetis
+    public static int compareMenu(String string1, String string2) {
+        int minLength = Math.min(string1.length(), string2.length());
         for (int i = 0; i < minLength; i++) {
-            if (str1.charAt(i) != str2.charAt(i)) {
-                return str1.charAt(i) - str2.charAt(i);
+            if (string1.charAt(i) != string2.charAt(i)) {
+                System.out.println(string1.charAt(i) - string2.charAt(i));
+                return string1.charAt(i) - string2.charAt(i);
             }
         }
-        return str1.length() - str2.length();
+        return string1.length() - string2.length();
     }
 
     // Method untuk mengubah status pesanan (role: Customer)
     public static void handleUpdateStatusPesanan() {
         System.out.println("----------------Update Status Pesanan----------------");
-        System.out.print("Order ID: ");
-        String orderID = input.nextLine();
-        Order order = findOrder(orderID);
-        
-        // Handling apabila order ID tidak ditemukan
-        if (order == null) {
-            System.out.println("Order ID tidak dapat ditemukan.");
-            return;
-        }
-        
-        // Update status
-        System.out.print("Status: ");
-        String newStatus = input.nextLine();
-        
-        // Apabila status pesanan sudah selesai dan input = "selesai", maka tidak akan berhasil diupdate
-        if (order.isOrderFinished() && newStatus.equalsIgnoreCase("Selesai")) {
-            System.out.println("Status pesanan dengan ID " + orderID + " tidak berhasil diupdate!");
+        while (true) {
+            System.out.print("Order ID: ");
+            String orderID = input.nextLine();
+            Order order = findOrder(orderID);
+            
+            // Handling apabila order ID tidak ditemukan
+            if (order == null) {
+                System.out.println("Order ID tidak dapat ditemukan.\n");
+                continue;
+            }
+            
+            // Update status
+            System.out.print("Status: ");
+            String newStatus = input.nextLine();
+            
+            // Apabila status berhasil diupdate
+            if (!order.isOrderFinished() && newStatus.equalsIgnoreCase("Selesai")) {
+                order.setOrderFinished(newStatus.equalsIgnoreCase("Selesai"));
+                System.out.println("Status pesanan dengan ID " + orderID + " berhasil diupdate!");
+                break;
 
-        // Apabila status pesanan belum selesai dan input = "not finished", maka tidak akan berhasil diupdate
-        } else if (!order.isOrderFinished() && newStatus.equalsIgnoreCase("not finished")) {
-            System.out.println("Status pesanan dengan ID " + orderID + " tidak berhasil diupdate!");
-        } else {
-            order.setOrderFinished(newStatus.equalsIgnoreCase("Selesai"));
-            System.out.println("Status pesanan dengan ID " + orderID + " berhasil diupdate!");
+            // Apabila status tidak berhasil diupdate
+            } else {
+                System.out.println("Status pesanan dengan ID " + orderID + " tidak berhasil diupdate!\n");
+            }
         }
     }
     
