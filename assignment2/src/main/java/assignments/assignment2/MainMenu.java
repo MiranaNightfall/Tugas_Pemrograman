@@ -218,6 +218,7 @@ public class MainMenu {
     // Method untuk menghapus restoran (role: Admin)
     public static void handleHapusRestoran() {
         System.out.println("----------------Hapus Restoran----------------");
+        // Apabila tidak ada restoran yang terdaftar -> terjadi infinite loop
         while (true) {
             System.out.print("Nama Restoran: ");
             String namaRestoran = input.nextLine();
@@ -295,6 +296,7 @@ public class MainMenu {
     // Method untuk mencetak bill (role: Customer)
     public static void handleCetakBill() {
         System.out.println("----------------Cetak Bill----------------");
+        // Apabila tidak ada order ID yang terdaftar -> terjadi infinite loop
         while (true) {
             System.out.print("Masukkan Order ID: ");
             String orderID = input.nextLine();
@@ -339,6 +341,7 @@ public class MainMenu {
     // Method untuk melihat menu restoran (role: Customer)
     public static void handleLihatMenu() {
         System.out.println("----------------Lihat Menu----------------");
+        // Apabila tidak ada restoran yang terdaftar -> terjadi infinite loop
         while (true) {
             System.out.print("Nama Restoran: ");
             String namaRestoran = input.nextLine();
@@ -406,6 +409,7 @@ public class MainMenu {
     // Method untuk mengubah status pesanan (role: Customer)
     public static void handleUpdateStatusPesanan() {
         System.out.println("----------------Update Status Pesanan----------------");
+        // Apabila tidak ada order ID yang terdaftar -> terjadi infinite loop
         while (true) {
             System.out.print("Order ID: ");
             String orderID = input.nextLine();
