@@ -1,17 +1,17 @@
-package assignments.assignment2;
-
+package assignments.assignment3.modifiedClass;
 import java.util.ArrayList;
-
 
 public class Restaurant {
     // Inisialisasi attribut
     private String nama;
     private ArrayList<Menu> menu;
+    private long saldo; // Penambahan atribut saldo
 
     // Constructor method
     public Restaurant(String nama, ArrayList<Menu> menu) {
         this.nama = nama;
         this.menu = menu;
+        this.saldo = 0; // Inisialisasi saldo dengan 0
     }
 
     // Getter dan setter method
@@ -29,5 +29,13 @@ public class Restaurant {
 
     public void setMenu(ArrayList<Menu> menu) {
         this.menu = menu;
+    }
+
+    public long getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(long saldo) {
+        this.saldo = saldo;
     }
 }

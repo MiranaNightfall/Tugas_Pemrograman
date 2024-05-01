@@ -1,5 +1,8 @@
-package assignments.assignment2;
+package assignments.assignment3.modifiedClass;
+
 import java.util.ArrayList;
+
+import assignments.assignment3.payment.DepeFoodPaymentSystem;
 
 public class User {
     // Inisialisasi variabel
@@ -9,23 +12,27 @@ public class User {
     private String lokasi;
     private String role;
     private ArrayList<Order> orderHistory;
+    private DepeFoodPaymentSystem payment;
+    private long saldo;
 
     // Constructor method
-    public User(String nama, String nomorTelepon, String email, String lokasi, String role) {
+    public User(String nama, String nomorTelepon, String email, String lokasi, String role, DepeFoodPaymentSystem payment, long saldo) {
         this.nama = nama;
         this.nomorTelepon = nomorTelepon;
         this.email = email;
         this.lokasi = lokasi;
         this.role = role;
         this.orderHistory = new ArrayList<>();
+        this.payment = payment;
+        this.saldo = saldo;
     }
 
     // Getter dan setter method
-    public ArrayList<Order> getOrderHistory() {
+    public ArrayList<Order> getOrders() {
         return orderHistory;
     }
 
-    public void setOrderHistory(ArrayList<Order> orderHistory) {
+    public void setOrders(ArrayList<Order> orderHistory) {
         this.orderHistory = orderHistory;
     }
 
@@ -69,7 +76,19 @@ public class User {
         this.role = role;
     }
 
-    public ArrayList<Order> getOrders() {
-        return orderHistory;
+    public DepeFoodPaymentSystem getPayment() {
+        return payment;
+    }
+
+    public void setPayment(DepeFoodPaymentSystem payment) {
+        this.payment = payment;
+    }
+
+    public long getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(long saldo) {
+        this.saldo = saldo;
     }
 }
