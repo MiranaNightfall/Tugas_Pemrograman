@@ -310,7 +310,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return null;
     }
 
-    // Method untuk 
+    // Method untuk men-display bill
     private void printBill(Order order) {
         System.out.println("Bill:");
         System.out.println("Order ID: " + order.getOrderID());

@@ -11,7 +11,7 @@ public class Order {
     private ArrayList<Menu> items;
     private boolean orderFinished;
 
-    // Constructor method
+    // Constructor method 
     public Order(String orderID, String tanggalPemesanan, int biayaOngkosKirim, Restaurant restaurant, ArrayList<Menu> items, boolean orderFinished) {
         this.orderID = orderID;
         this.tanggalPemesanan = tanggalPemesanan;

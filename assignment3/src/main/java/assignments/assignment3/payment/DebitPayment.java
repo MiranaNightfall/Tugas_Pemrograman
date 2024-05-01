@@ -23,7 +23,7 @@ public class DebitPayment implements DepeFoodPaymentSystem {
         return amount;
     }
 
-    // Getter dan setter untuk saldo
+    // Getter dan setter untuk saldo 
     public long getSaldo() {
         return saldo;
     }

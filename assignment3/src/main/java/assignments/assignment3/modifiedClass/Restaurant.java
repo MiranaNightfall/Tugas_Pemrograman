@@ -14,7 +14,7 @@ public class Restaurant {
         this.saldo = 0; // Inisialisasi saldo dengan 0
     }
 
-    // Getter dan setter method
+    // Getter dan setter method 
     public String getNama() {
         return nama;
     }

@@ -15,7 +15,7 @@ public class LoginManager {
         this.customerSystem = customerSystem;
     }
 
-    // Method untuk menangkap role user yang logged in
+    // Method untuk menangkap role user yang logged in 
     public UserSystemCLI getSystem(String role) {
         if (role.equals("Admin")) {
             return adminSystem;

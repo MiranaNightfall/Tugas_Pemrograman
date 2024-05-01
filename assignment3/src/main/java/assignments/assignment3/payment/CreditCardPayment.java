@@ -13,7 +13,7 @@ public class CreditCardPayment implements DepeFoodPaymentSystem {
         return totalPayment;
     }
 
-    // Return biaya transaksi
+    // Return biaya transaksi 
     private long countTransactionFee(long amount) {
         return (long) (amount * TRANSACTION_FEE_PERCENTAGE);
     }

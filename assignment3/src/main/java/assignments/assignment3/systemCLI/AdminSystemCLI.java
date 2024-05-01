@@ -43,7 +43,7 @@ public class AdminSystemCLI extends UserSystemCLI {
         return true;
     }
 
-    // Override method untuk men-display menu untuk Admin
+    // Override method untuk men-display menu untuk Admin 
     @Override
     public void displayMenu() {
         System.out.println("--------------------------------------------");

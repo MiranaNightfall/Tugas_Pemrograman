@@ -33,6 +33,7 @@ public class MainMenu {
         mainMenu.run();
     }
 
+    // Method yang akan berjalan ketika program dimulai
     public void run(){
         printHeader();
         boolean exit = false;

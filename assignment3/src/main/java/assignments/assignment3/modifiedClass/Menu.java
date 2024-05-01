@@ -11,7 +11,7 @@ public class Menu {
         this.harga = harga;
     }
 
-    // Getter dan setter method
+    // Getter dan setter method 
     public String getNamaMakanan() {
         return namaMakanan;
     }
