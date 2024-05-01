@@ -1,13 +1,16 @@
 package assignments.assignment3.payment;
 
 public class DebitPayment implements DepeFoodPaymentSystem {
+    // Inisialisasi atribut
     private static final double MINIMUM_TOTAL_PRICE = 50000.0;
     private long saldo;
 
+    // Constructor
     public DebitPayment(long saldo) {
         this.saldo = saldo;
     }
 
+    // Override method proses pembayaran
     @Override
     public long processPayment(long amount) throws Exception {
         if (amount < MINIMUM_TOTAL_PRICE) {
@@ -20,6 +23,7 @@ public class DebitPayment implements DepeFoodPaymentSystem {
         return amount;
     }
 
+    // Getter dan setter untuk saldo
     public long getSaldo() {
         return saldo;
     }

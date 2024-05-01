@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CustomerSystemCLI extends UserSystemCLI {
+    // Inisialisasi
     private ArrayList<User> users;
     private ArrayList<Restaurant> restaurants;
     private User loggedInUser;
@@ -34,6 +35,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
     
+    // Check eksistensi user yang logged in
     private User getUserByNameAndPhone(String nama, String noTelp) {
         for (User user : users) {
             if (user.getNama().equals(nama) && user.getNomorTelepon().equals(noTelp)) {
@@ -42,7 +44,8 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
         return null;
     }
-
+    
+    // Constructor
     public CustomerSystemCLI(ArrayList<User> users, ArrayList<Restaurant> restaurants) {
         this.users = users;
         this.restaurants = restaurants;
@@ -50,6 +53,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         this.loggedInUser = null; // Inisialisasi loggedInUser menjadi null
     }
 
+    // Method untuk override handleMenu untuk customer
     @Override
     public boolean handleMenu(int choice) {
         switch (choice) {
@@ -66,6 +70,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return true;
     }
 
+    // Method untuk override display menu untuk customer
     @Override
     public void displayMenu() {
         System.out.println("--------------------------------------------");
@@ -80,6 +85,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         System.out.print("Pilihan menu: ");
     }
 
+    // Method untuk membuat pesanan
     void handleBuatPesanan() {
         String orderID;
         String namaRestoran;
@@ -137,43 +143,18 @@ public class CustomerSystemCLI extends UserSystemCLI {
         System.out.println("Pesanan dengan ID " + orderID + " berhasil ditambahkan.");
     }
 
+    // Method untuk mencetak bill
     void handleCetakBill() {
         System.out.println("----------------Cetak Bill----------------");
-        // Apabila tidak ada order ID yang terdaftar -> terjadi infinite loop
         while (true) {
             System.out.print("Masukkan Order ID: ");
             String orderID = input.nextLine();
-            double totalBiaya = 0;
             
-            // Apabila order ditemukan -> cetak bill sesuai dengan yang dipesan
+            // Handling error order ID
             Order order = findOrder(orderID);
-            if (order != null) {    
-                System.out.println("\nBill:");
-                System.out.println("Order ID: " + order.getOrderID());
-                System.out.println("Tanggal Pemesanan: " + order.getTanggalPemesanan());
-                System.out.println("Restaurant: " + order.getRestaurant().getNama());
-                System.out.println("Lokasi Pengiriman: " + loggedInUser.getLokasi());
-                System.out.print("Status Pengiriman: ");
-                System.out.println(order.isOrderFinished() ? "Selesai" : "Not Finished");
-                System.out.println("Pesanan:");
-                for (Menu item : order.getItems()) {
-                    // Formatting harga pada setiap menu yang dipesan
-                    String formattedHarga = String.format("%.2f", item.getHarga());
-                    if (formattedHarga.endsWith("0")) {
-                        formattedHarga = String.valueOf((int) item.getHarga());
-                    }
-                    System.out.println("- " + item.getNamaMakanan() + " " + formattedHarga);
-                    totalBiaya += item.getHarga();
-                }
-                System.out.println("Biaya Ongkos Kirim: Rp " + generateBill(loggedInUser));
-                totalBiaya += generateBill(loggedInUser);
-
-                // Formatting harga total biaya
-                String formattedTotalBiaya = String.format("%.2f", totalBiaya);
-                if (formattedTotalBiaya.endsWith("0")) {
-                    formattedTotalBiaya = String.valueOf((int) totalBiaya);
-                }
-                System.out.println("Total Biaya: Rp " + formattedTotalBiaya);
+            if (order != null) {
+                System.out.println();
+                printBill(order);
                 break;
             } else {
                 System.out.println("Order ID tidak dapat ditemukan.\n");
@@ -181,6 +162,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
 
+    // Method untuk mendisplay menu pada restaurant
     void handleLihatMenu() {
         System.out.println("----------------Lihat Menu----------------");
         // Apabila tidak ada restoran yang terdaftar -> terjadi infinite loop
@@ -214,6 +196,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
 
+    // Method untuk mencari menu
     private static Menu findMenu(Restaurant restaurant, String namaMenu) {
         for (Menu menu : restaurant.getMenu()) {
             if (menu.getNamaMakanan().equals(namaMenu)) {
@@ -257,12 +240,13 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return string1.length() - string2.length();
     }
 
+    // Method untuk membayar pesanan
     void handleBayarBill() {
-        // Implementasi method untuk handle ketika customer ingin membayar bill
         System.out.println("----------------Bayar Bill----------------");
         System.out.print("Masukkan Order ID: ");
         String orderId = input.nextLine();
-
+        
+        // Handling error pada order ID
         Order order = findOrder(orderId);
         if (order == null) {
             System.out.println("Order ID tidak dapat ditemukan.");
@@ -272,6 +256,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
             System.out.println();
             printBill(order);
 
+            // Opsi metode pembayaran
             System.out.println("\nOpsi Pembayaran:");
             System.out.println("1. Credit Card");
             System.out.println("2. Debit");
@@ -294,57 +279,28 @@ public class CustomerSystemCLI extends UserSystemCLI {
                 return;
             }
 
+            // Kalkulasi untuk total biaya
             long totalBiaya = calculateTotalBiaya(order);
             try {
                 long paymentAmount = paymentSystem.processPayment(totalBiaya);
                 if (paymentAmount > 0) {
                     loggedInUser.setSaldo(loggedInUser.getSaldo() - paymentAmount);
                     order.getRestaurant().setSaldo(order.getRestaurant().getSaldo() + (totalBiaya - paymentAmount));
-                    order.setOrderFinished(true);
+                    order.setOrderFinished(true); // Set status -> "Selesai" setelah membayar
                     System.out.println("Berhasil Membayar Bill sebesar Rp " + totalBiaya + (paymentSystem instanceof CreditCardPayment ? " dengan biaya transaksi sebesar Rp " + (paymentAmount - totalBiaya) : ""));
                 }
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.out.println("terjadi error: " + e.getMessage());
             }
         }
     }
 
-    void handleUpdateStatusPesanan() {
-        System.out.println("----------------Update Status Pesanan----------------");
-        // Apabila tidak ada order ID yang terdaftar -> terjadi infinite loop
-        while (true) {
-            System.out.print("Order ID: ");
-            String orderID = input.nextLine();
-            Order order = findOrder(orderID);
-            
-            // Handling apabila order ID tidak ditemukan
-            if (order == null) {
-                System.out.println("Order ID tidak dapat ditemukan.\n");
-                continue;
-            }
-            
-            // Update status
-            System.out.print("Status: ");
-            String newStatus = input.nextLine();
-            
-            // Apabila status berhasil diupdate
-            if (!order.isOrderFinished() && newStatus.equalsIgnoreCase("Selesai")) {
-                order.setOrderFinished(newStatus.equalsIgnoreCase("Selesai"));
-                System.out.println("Status pesanan dengan ID " + orderID + " berhasil diupdate!");
-                break;
-
-            // Apabila status tidak berhasil diupdate
-            } else {
-                System.out.println("Status pesanan dengan ID " + orderID + " tidak berhasil diupdate!\n");
-            }
-        }
-    }
-
+    // Method untuk cek saldo
     void handleCekSaldo() {
-        // Implementasi method untuk handle ketika customer ingin mengecek saldo yang dimiliki
         System.out.println("Sisa saldo sebesar Rp " + loggedInUser.getSaldo());
     }
 
+    // Method untuk check eksistensi dari order ID yang diinput
     private Order findOrder(String orderId) {
         for (Order order : loggedInUser.getOrders()) {
             if (order.getOrderID().equals(orderId)) {
@@ -354,6 +310,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return null;
     }
 
+    // Method untuk 
     private void printBill(Order order) {
         System.out.println("Bill:");
         System.out.println("Order ID: " + order.getOrderID());
@@ -363,11 +320,24 @@ public class CustomerSystemCLI extends UserSystemCLI {
         System.out.println("Status Pengiriman: " + (order.isOrderFinished() ? "Selesai" : "Not Finished"));
         System.out.println("Pesanan:");
         for (Menu item : order.getItems()) {
-            System.out.println("- " + item.getNamaMakanan() + " " + item.getHarga());
+            System.out.println("- " + item.getNamaMakanan() + " " + formatPrice(item.getHarga()));
         }
-        System.out.println("Biaya Ongkos Kirim: Rp " + order.getBiayaOngkosKirim());
+        System.out.println("Biaya Ongkos Kirim: Rp " + formatPrice(order.getBiayaOngkosKirim()));
+        System.out.println("Total Biaya: Rp " + formatPrice(calculateTotalBiaya(order)));
     }
 
+    // Method untuk formatting harga
+    private String formatPrice(double price) {
+        String formattedPrice;
+        if (price == (long) price) {
+            formattedPrice = String.format("%d", (long) price);
+        } else {
+            formattedPrice = String.format("%.2f", price);
+        }
+        return formattedPrice;
+    }
+
+    // Method untuk menghitung biaya ongkir (berdasarkan lokasi user)
     private static int generateBill(User loggedInUser) {
         String lokasi = loggedInUser.getLokasi();
         if (lokasi.toUpperCase().equals("P")) {
@@ -383,6 +353,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
 
+    // Method untuk check eksistensi dari restaurant yang diinput
     private Restaurant findRestaurant(String namaRestoran) {
         for (Restaurant restaurant : restaurants) {
             if (restaurant.getNama().equalsIgnoreCase(namaRestoran)) {
@@ -392,6 +363,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return null;
     }
 
+    // Method untuk kalkulasi total biaya
     private long calculateTotalBiaya(Order order) {
         long totalBiaya = 0;
         for (Menu item : order.getItems()) {

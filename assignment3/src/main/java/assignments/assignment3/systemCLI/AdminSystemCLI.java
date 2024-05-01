@@ -8,13 +8,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AdminSystemCLI extends UserSystemCLI {
+    // Inisialisasi
     private ArrayList<Restaurant> restaurants;
 
+    // Constructor
     public AdminSystemCLI(ArrayList<User> userList, ArrayList<Restaurant> restoList) {
     this.restaurants = restoList;
     this.input = new Scanner(System.in);
     }
     
+    // Method yang akan berjalan ketika program dimulai
     public void run(String nama, String noTelp) {
         System.out.println("Selamat Datang " + nama + "!");
         boolean isLoggedIn = true;
@@ -26,13 +29,13 @@ public class AdminSystemCLI extends UserSystemCLI {
         }
     }
 
+    // Override method handleMenu untuk Admin
     @Override
     public boolean handleMenu(int command) {
         switch (command) {
             case 1 -> handleTambahRestoran();
             case 2 -> handleHapusRestoran();
             case 3 -> {
-                System.out.println();
                 return false;
             }
             default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
@@ -40,6 +43,7 @@ public class AdminSystemCLI extends UserSystemCLI {
         return true;
     }
 
+    // Override method untuk men-display menu untuk Admin
     @Override
     public void displayMenu() {
         System.out.println("--------------------------------------------");
@@ -51,6 +55,7 @@ public class AdminSystemCLI extends UserSystemCLI {
         System.out.print("Pilihan menu: ");
     }
 
+    // Method untuk menambah restoran beserta menunya
     protected void handleTambahRestoran() {
         System.out.println("----------------Tambah Restoran----------------");
         while (true) {
@@ -124,6 +129,7 @@ public class AdminSystemCLI extends UserSystemCLI {
         }
     }
 
+    // Method untuk menghapus restoran
     protected void handleHapusRestoran() {
         System.out.println("----------------Hapus Restoran----------------");
         // Apabila tidak ada restoran yang terdaftar -> terjadi infinite loop
@@ -143,6 +149,7 @@ public class AdminSystemCLI extends UserSystemCLI {
         }
     }
 
+    // Method untuk mencari nama restaurant (check eksistensi restaurant)
     private Restaurant findRestaurant(String namaRestoran) {
         for (Restaurant restaurant : restaurants) {
             if (restaurant.getNama().equalsIgnoreCase(namaRestoran)) {

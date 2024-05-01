@@ -11,8 +11,8 @@ public class User {
     private String email;
     private String lokasi;
     private String role;
-    private ArrayList<Order> orderHistory;
-    private DepeFoodPaymentSystem payment;
+    private ArrayList<Order> orderHistory; 
+    private DepeFoodPaymentSystem payment; // A
     private long saldo;
 
     // Constructor method

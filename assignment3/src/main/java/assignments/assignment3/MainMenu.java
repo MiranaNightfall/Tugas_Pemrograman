@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import assignments.assignment3.modifiedClass.Restaurant;
 import assignments.assignment3.modifiedClass.User;
-import assignments.assignment3.LoginManager;
+//import assignments.assignment3.LoginManager;
 import assignments.assignment3.payment.CreditCardPayment;
 import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment3.systemCLI.AdminSystemCLI;
@@ -13,16 +13,19 @@ import assignments.assignment3.systemCLI.CustomerSystemCLI;
 import assignments.assignment3.systemCLI.UserSystemCLI;
 
 public class MainMenu {
+    // Inisialisasi
     private final Scanner input;
     private final LoginManager loginManager;
     private static ArrayList<Restaurant> restoList;
     private static ArrayList<User> userList;
-
+    
+    // Constructor
     public MainMenu(Scanner in, LoginManager loginManager) {
         this.input = in;
         this.loginManager = loginManager;
     }
 
+    // Main class
     public static void main(String[] args) {
         initUser(); // Inisialisasi data user
         initRestaurant(); // Inisialisasi data restoran
@@ -43,23 +46,25 @@ public class MainMenu {
                 default -> System.out.println("Pilihan tidak valid, silakan coba lagi.");
             }
         }
-
+        System.out.println("Terima kasih telah menggunakan DepeFood!");
         input.close();
     }
 
+    // Method untuk user login ke program
     private void login() {
         System.out.println("\nSilakan Login:");
         System.out.print("Nama: ");
         String nama = input.nextLine();
         System.out.print("Nomor Telepon: ");
         String noTelp = input.nextLine();
-    
+        
+        // Handling userLoggedIn
         User userLoggedIn = getUserByNameAndPhone(nama, noTelp);
         if (userLoggedIn != null) {
             UserSystemCLI system = loginManager.getSystem(userLoggedIn.getRole());
-            if (system instanceof AdminSystemCLI) {
+            if (system instanceof AdminSystemCLI) { // User login -> role = Admin
                 ((AdminSystemCLI) system).run(nama, noTelp);
-            } else if (system instanceof CustomerSystemCLI) {
+            } else if (system instanceof CustomerSystemCLI) { // User login -> role = Customer
                 ((CustomerSystemCLI) system).run(nama, noTelp);
             }
         } else {
@@ -67,6 +72,7 @@ public class MainMenu {
         }
     }
 
+    // Check eksistensi dari user yang mencoba untuk login
     private User getUserByNameAndPhone(String nama, String noTelp) {
         for (User user : userList) {
             if (user.getNama().equals(nama) && user.getNomorTelepon().equals(noTelp)) {
@@ -75,7 +81,8 @@ public class MainMenu {
         }
         return null;
     }
-
+    
+    // Header program
     private static void printHeader(){
         System.out.println("\n>>=======================================<<");
         System.out.println("|| ___                 ___             _ ||");
@@ -86,8 +93,9 @@ public class MainMenu {
         System.out.println(">>=======================================<<");
     }
 
+    // Menu utama
     private static void startMenu(){
-        System.out.println("Selamat datang di DepeFood!");
+        System.out.println("\nSelamat datang di DepeFood!");
         System.out.println("--------------------------------------------");
         System.out.println("Pilih menu:");
         System.out.println("1. Login");
@@ -96,10 +104,9 @@ public class MainMenu {
         System.out.print("Pilihan menu: ");
     }
 
+    // Initialize user
     public static void initUser(){
         userList = new ArrayList<User>();
-
-        //TODO: Adjust constructor dan atribut pada class User di Assignment 2
         userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(500000), 500000));
         userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer", new CreditCardPayment(), 2000000));
         userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer", new DebitPayment(750000), 750000));
@@ -109,9 +116,8 @@ public class MainMenu {
         userList.add(new User("Admin Baik", "9123912308", "admin.b@gmail.com", "-", "Admin", new CreditCardPayment(), 0));
     }
 
+    // Initialize restaurant
     public static void initRestaurant() {
-        // Inisialisasi data restoran
         restoList = new ArrayList<Restaurant>();
-        // Tambahkan data restoran di sini
     }
 }
