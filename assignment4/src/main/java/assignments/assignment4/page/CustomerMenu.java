@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import assignments.assignment1.OrderGenerator;
 import assignments.assignment3.DepeFood;
@@ -37,6 +40,7 @@ public class CustomerMenu extends MemberMenu {
     private MainApp mainApp;
     private List<Restaurant> restoList = new ArrayList<>();
     private User user;
+    private Label saldoLabel; // Store the balance label as a class variable
 
     public CustomerMenu(Stage stage, MainApp mainApp, User user) {
         this.stage = stage;
@@ -66,18 +70,27 @@ public class CustomerMenu extends MemberMenu {
         menuLayout.setAlignment(Pos.CENTER);
         menuLayout.setPadding(new Insets(20));
 
-        // Menambahkan label untuk menampilkan pesan selamat datang
+        // Mengubah warna latar belakang VBox
+        menuLayout.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+
         Label welcomeLabel = new Label("Selamat Datang, " + user.getNama());
+        welcomeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        welcomeLabel.setTextFill(Color.WHITE);
         menuLayout.getChildren().add(welcomeLabel);
 
         Button addOrderButton = new Button("Buat Pesanan");
+        addOrderButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         addOrderButton.setOnAction(e -> mainApp.setScene(mainApp.getScene("TambahPesanan")));
+
         Button printBillButton = new Button("Cetak Bill");
         printBillButton.setOnAction(e -> stage.setScene(printBillScene));
+
         Button payBillButton = new Button("Bayar Bill");
         payBillButton.setOnAction(e -> stage.setScene(payBillScene));
+
         Button checkBalanceButton = new Button("Cek Saldo");
         checkBalanceButton.setOnAction(e -> stage.setScene(cekSaldoScene));
+
         Button logoutButton = new Button("Logout");
         logoutButton.setOnAction(e -> mainApp.logout());
 
@@ -181,12 +194,12 @@ public class CustomerMenu extends MemberMenu {
         long userBalance = currentUser.getSaldo();
 
         Label nameLabel = new Label(userName);
-        Label balanceLabel = new Label("Saldo: Rp" + userBalance);
-        Button backButton = new Button("Kembali");
+        saldoLabel = new Label("Saldo Anda: Rp" + userBalance); // Inisialisasi saldoLabel
 
+        Button backButton = new Button("Kembali");
         backButton.setOnAction(e -> stage.setScene(scene));
 
-        layout.getChildren().addAll(nameLabel, balanceLabel, backButton);
+        layout.getChildren().addAll(nameLabel, saldoLabel, backButton);
 
         return new Scene(layout, 400, 200);
     }
@@ -287,28 +300,28 @@ public class CustomerMenu extends MemberMenu {
     // Method untuk handling error pada saat bayar Bill
     private void handleBayarBill(String orderID, String paymentOption) {
         Order order = DepeFood.getOrderOrNull(orderID);
-
+    
         if (order == null) {
             showAlert("Order ID Tidak Ditemukan", "Kesalahan", "Order ID tidak dapat ditemukan.", AlertType.ERROR);
             return;
         }
-
+    
         if (order.getOrderFinished()) {
             showAlert("Pesanan Sudah Dibayar", "Informasi", "Pesanan dengan ID " + orderID + " sudah dibayar sebelumnya.", AlertType.INFORMATION);
             return;
         }
-
+    
         User user = DepeFood.getUserLoggedIn();
         DepeFoodPaymentSystem paymentSystem = user.getPaymentSystem();
         boolean isCreditCard = paymentSystem instanceof CreditCardPayment;
-
+    
         if ((isCreditCard && paymentOption.equals("Debit")) || (!isCreditCard && paymentOption.equals("Credit Card"))) {
             showAlert("Metode Pembayaran Tidak Tersedia", "Kesalahan", user.getNama() + " belum memiliki metode pembayaran ini", AlertType.ERROR);
             return;
         }
-
+    
         long amountToPay = 0;
-
+    
         try {
             amountToPay = paymentSystem.processPayment(user.getSaldo(), (long) order.getTotalHarga());
         } catch (Exception e) {
@@ -319,20 +332,20 @@ public class CustomerMenu extends MemberMenu {
             }
             return;
         }
-
+    
         long saldoLeft = user.getSaldo() - amountToPay;
         user.setSaldo(saldoLeft);
-        DepeFood.setPenggunaLoggedIn(user);
-
-        System.out.println(DepeFood.getUserLoggedIn().getSaldo());
+        saldoLabel.setText("Saldo Anda: " + saldoLeft);  // Update the balance label
         DepeFood.handleUpdateStatusPesanan(order);
-
+    
         DecimalFormat decimalFormat = new DecimalFormat();
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setGroupingSeparator('.');
         decimalFormat.setDecimalFormatSymbols(symbols);
-
+    
         showAlert("Pembayaran Berhasil", "Sukses", "Berhasil Membayar Bill sebesar Rp " + decimalFormat.format(order.getTotalHarga()) + " dengan biaya transaksi sebesar Rp " + decimalFormat.format(amountToPay - order.getTotalHarga()), AlertType.INFORMATION);
+    
+        refresh(); // Refresh data setelah pembayaran berhasil
     }
     
     private void populateMenuList(String restaurantName, ListView<String> menuListView) {

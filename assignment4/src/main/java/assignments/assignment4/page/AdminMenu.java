@@ -12,6 +12,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.collections.ObservableList;
 import assignments.assignment3.Menu;
@@ -47,24 +50,34 @@ public class AdminMenu extends MemberMenu {
         this.viewRestaurantsScene = createViewRestaurantsForm();
     }
 
-    @Override
+     @Override
     public Scene createBaseMenu() {
         VBox menuLayout = new VBox(10);
         menuLayout.setAlignment(Pos.CENTER);
         menuLayout.setPadding(new Insets(20));
 
-        // Menambahkan label untuk menampilkan pesan selamat datang
+        // Mengubah warna latar belakang VBox
+        menuLayout.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+
         Label welcomeLabel = new Label("Selamat Datang, " + user.getNama());
+        welcomeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        welcomeLabel.setTextFill(Color.WHITE);
         menuLayout.getChildren().add(welcomeLabel);
+
         Button addRestaurantButton = new Button("Tambah Restoran");
+        addRestaurantButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         addRestaurantButton.setOnAction(e -> stage.setScene(addRestaurantScene));
+
         Button addMenuButton = new Button("Tambah Menu");
         addMenuButton.setOnAction(e -> stage.setScene(addMenuScene));
+
         Button viewRestaurantsButton = new Button("Lihat Daftar Restoran");
         viewRestaurantsButton.setOnAction(e -> stage.setScene(viewRestaurantsScene));
+
         Button logoutButton = new Button("Logout");
         logoutButton.setOnAction(e -> mainApp.logout());
         menuLayout.getChildren().addAll(addRestaurantButton, addMenuButton, viewRestaurantsButton, logoutButton);
+
         return new Scene(menuLayout, 400, 600);
     }
 
@@ -73,8 +86,10 @@ public class AdminMenu extends MemberMenu {
         VBox layout = new VBox(10);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
+
         Label label = new Label("Nama Restoran:");
         TextField nameInput = new TextField();
+
         Button addButton = new Button("Tambah Restoran");
         Button backButton = new Button("Kembali");
         addButton.setOnAction(e -> {

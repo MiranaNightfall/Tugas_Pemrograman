@@ -14,11 +14,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class LoginForm {
     private Stage stage;
-    private MainApp mainApp; // MainApp instance
+    private MainApp mainApp;
     private TextField nameInput;
     private TextField phoneInput;
     private Scene scene;
@@ -26,10 +29,9 @@ public class LoginForm {
     public LoginForm(Stage stage, MainApp mainApp) {
         this.stage = stage;
         this.mainApp = mainApp;
-        this.scene = createLoginForm(); // Membuat scene saat instance dibuat
+        this.scene = createLoginForm();
     }
 
-    // Method untuk membuat form login
     private Scene createLoginForm() {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -37,22 +39,38 @@ public class LoginForm {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
+        // Mengubah warna latar belakang GridPane
+        grid.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+
+        // Menambahkan label "Welcome to DepeFood"
+        Label welcomeLabel = new Label("Welcome to DepeFood");
+        welcomeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        welcomeLabel.setTextFill(Color.WHITE);
+        grid.add(welcomeLabel, 0, 0, 2, 1);
+
         Label nameLabel = new Label("Nama:");
-        grid.add(nameLabel, 0, 0);
+        nameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        nameLabel.setTextFill(Color.WHITE);
+        grid.add(nameLabel, 0, 1);
 
         nameInput = new TextField();
-        grid.add(nameInput, 1, 0);
+        grid.add(nameInput, 1, 1);
 
         Label phoneLabel = new Label("Nomor Telepon:");
-        grid.add(phoneLabel, 0, 1);
+        phoneLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        phoneLabel.setTextFill(Color.WHITE);
+        grid.add(phoneLabel, 0, 2);
 
+        // Mengubah tampilan input nomor telepon menjadi karakter dot
         phoneInput = new TextField();
-        grid.add(phoneInput, 1, 1);
+        phoneInput.setPromptText("Masukkan nomor telepon");
+        phoneInput.setStyle("-fx-text-box-character: \u25CF;"); // Karakter dot
+        grid.add(phoneInput, 1, 2);
 
         Button loginButton = new Button("Login");
+        loginButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         loginButton.setOnAction(e -> handleLogin());
-        grid.add(loginButton, 1, 2);
-
+        grid.add(loginButton, 1, 3);
         GridPane.setHalignment(loginButton, HPos.RIGHT);
 
         return new Scene(grid, 400, 600);

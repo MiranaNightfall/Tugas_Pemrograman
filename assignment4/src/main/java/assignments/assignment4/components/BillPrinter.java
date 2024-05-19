@@ -13,6 +13,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.text.DecimalFormat;
@@ -29,16 +32,22 @@ public class BillPrinter {
         this.user = user;
     }
 
-    // Method untuk membuat form cetak bill
     private Scene createBillPrinterForm() {
         VBox layout = new VBox(10);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
 
+        // Mengubah warna latar belakang VBox
+        layout.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+
         Label label = new Label("Order ID:");
+        label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        label.setTextFill(Color.WHITE);
         TextField orderIdInput = new TextField();
         Button printButton = new Button("Print Bill");
+        printButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         Button backButton = new Button("Kembali");
+        backButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
 
         printButton.setOnAction(e -> {
             String orderId = orderIdInput.getText();
@@ -72,12 +81,24 @@ public class BillPrinter {
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(20));
+    
+        // Mengubah warna latar belakang GridPane
+        gridPane.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+    
         int row = 0;
     
-        gridPane.add(new Label("Bill"), 0, row++, 2, 1);
+        Label billLabel = new Label("Bill");
+        billLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        billLabel.setTextFill(Color.WHITE);
+        gridPane.add(billLabel, 0, row++, 2, 1);
     
-        gridPane.add(new Label("Order ID:"), 0, row);
-        gridPane.add(new Label(order.getOrderId()), 1, row++);
+        Label orderIdLabel = new Label("Order ID:");
+        orderIdLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        orderIdLabel.setTextFill(Color.WHITE);
+        gridPane.add(orderIdLabel, 0, row);
+        Label orderIdValue = new Label(order.getOrderId());
+        orderIdValue.setTextFill(Color.WHITE);
+        gridPane.add(orderIdValue, 1, row++);
     
         gridPane.add(new Label("Tanggal Pemesanan:"), 0, row);
         gridPane.add(new Label(order.getTanggal()), 1, row++);
@@ -104,9 +125,10 @@ public class BillPrinter {
         gridPane.add(new Label("Total Biaya: Rp " + formatCurrency(order.getTotalHarga())), 0, row++, 2, 1);
     
         Button backButton = new Button("Kembali");
+        backButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         backButton.setOnAction(e -> dialog.close());
         gridPane.add(backButton, 0, row, 2, 1);
-    
+
         Scene dialogScene = new Scene(gridPane, 400, 600);
         dialog.setScene(dialogScene);
         dialog.showAndWait();

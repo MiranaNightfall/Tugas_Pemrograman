@@ -1,5 +1,8 @@
 package assignments.assignment4;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import assignments.assignment3.DepeFood;
 import assignments.assignment3.User;
 import assignments.assignment4.components.form.LoginForm;
@@ -9,10 +12,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class MainApp extends Application {
+
     private Stage window;
     private Map<String, Scene> allScenes = new HashMap<>();
     private Scene currentScene;
@@ -20,18 +21,22 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        
         window = primaryStage;
         window.setTitle("Ngapain kuliah? Mending order DepeFood");
         DepeFood.initUser(); // Initialize users
 
         // Initialize all scenes
         Scene loginScene = new LoginForm(window, this).getScene();
-        allScenes.put("Login", loginScene); // Populate all scenes map
-        setScene(loginScene); // Set the initial scene of the application to the login scene
+
+        // Populate all scenes map
+        allScenes.put("Login", loginScene);
+
+        // Set the initial scene of the application to the login scene
+        setScene(loginScene);
         window.show();
     }
 
-    // Method to set the user and initialize the corresponding menu (Admin or Customer)
     public void setUser(User newUser, String role) {
         user = newUser;
         if (user != null) {
@@ -47,7 +52,7 @@ public class MainApp extends Application {
         }
     }
 
-    // Method to set the current scene
+    // Method to set a scene
     public void setScene(Scene scene) {
         window.setScene(scene);
         currentScene = scene;
@@ -58,12 +63,10 @@ public class MainApp extends Application {
         return allScenes.get(sceneName);
     }
 
-    // Method to add a new scene to the map
     public void addScene(String sceneName, Scene scene) {
         allScenes.put(sceneName, scene);
     }
 
-    // Method to log out the current user and switch back to the login scene
     public void logout() {
         setUser(null, null); // Clear the current user
         if (currentScene != getScene("Login")) {
