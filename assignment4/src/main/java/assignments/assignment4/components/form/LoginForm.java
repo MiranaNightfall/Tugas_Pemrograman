@@ -43,7 +43,7 @@ public class LoginForm {
         grid.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
 
         // Menambahkan label "Welcome to DepeFood"
-        Label welcomeLabel = new Label("Welcome to DepeFood");
+        Label welcomeLabel = new Label("Welcome to DepeFood!");
         welcomeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         welcomeLabel.setTextFill(Color.WHITE);
         grid.add(welcomeLabel, 0, 0, 2, 1);
@@ -64,7 +64,6 @@ public class LoginForm {
         // Mengubah tampilan input nomor telepon menjadi karakter dot
         phoneInput = new TextField();
         phoneInput.setPromptText("Masukkan nomor telepon");
-        phoneInput.setStyle("-fx-text-box-character: \u25CF;"); // Karakter dot
         grid.add(phoneInput, 1, 2);
 
         Button loginButton = new Button("Login");

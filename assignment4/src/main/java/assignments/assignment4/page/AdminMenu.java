@@ -10,13 +10,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.HBox;
+//import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.collections.ObservableList;
+//import javafx.collections.ObservableList;
 import assignments.assignment3.Menu;
 
 import java.text.DecimalFormat;
@@ -37,20 +37,20 @@ public class AdminMenu extends MemberMenu {
     private List<Restaurant> restoList = new ArrayList<>();
     private MainApp mainApp;
     private ComboBox<String> restaurantComboBox = new ComboBox<>();
-    private ListView<String> menuItemsListView = new ListView<>();
+    //private ListView<String> menuItemsListView = new ListView<>();
 
     public AdminMenu(Stage stage, MainApp mainApp, User user) {
         this.stage = stage;
         this.mainApp = mainApp;
         this.user = user;
-        this.restoList = DepeFood.getRestoList(); // Inisialisasi restoList dengan daftar restoran dari DepeFood
+        this.restoList = DepeFood.getRestoList();
         this.scene = createBaseMenu();
         this.addRestaurantScene = createAddRestaurantForm();
         this.addMenuScene = createAddMenuForm();
         this.viewRestaurantsScene = createViewRestaurantsForm();
     }
 
-     @Override
+    @Override
     public Scene createBaseMenu() {
         VBox menuLayout = new VBox(10);
         menuLayout.setAlignment(Pos.CENTER);
@@ -87,11 +87,19 @@ public class AdminMenu extends MemberMenu {
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
 
+        // Mengubah warna latar belakang VBox
+        layout.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+
         Label label = new Label("Nama Restoran:");
+        label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        label.setTextFill(Color.WHITE);
         TextField nameInput = new TextField();
 
         Button addButton = new Button("Tambah Restoran");
+        addButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         Button backButton = new Button("Kembali");
+        backButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+
         addButton.setOnAction(e -> {
             String nama = nameInput.getText();
             handleTambahRestoran(nama);
@@ -107,21 +115,30 @@ public class AdminMenu extends MemberMenu {
         VBox layout = new VBox(10);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
-    
+
+        // Mengubah warna latar belakang VBox
+        layout.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+
         Label restaurantLabel = new Label("Restoran:");
+        restaurantLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        restaurantLabel.setTextFill(Color.WHITE);
         restaurantComboBox = new ComboBox<>();
-        updateRestaurantComboBox(); // Memperbarui combobox dengan daftar restoran terbaru
+        updateRestaurantComboBox();
         restaurantComboBox.setItems(FXCollections.observableArrayList(
                 restoList.stream()
                         .map(Restaurant::getNama)
                         .collect(Collectors.toList())
         ));
-    
+
         Label itemLabel = new Label("Nama Menu:");
+        itemLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        itemLabel.setTextFill(Color.WHITE);
         TextField itemInput = new TextField();
         Label priceLabel = new Label("Harga:");
+        priceLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        priceLabel.setTextFill(Color.WHITE);
         TextField priceInput = new TextField();
-    
+
         // Tambahkan TextFormatter untuk hanya menerima input numerik
         UnaryOperator<TextFormatter.Change> filter = change -> {
             String text = change.getText();
@@ -132,10 +149,12 @@ public class AdminMenu extends MemberMenu {
         };
         TextFormatter<String> priceFormatter = new TextFormatter<>(filter);
         priceInput.setTextFormatter(priceFormatter);
-    
+
         Button addButton = new Button("Tambah Menu");
+        addButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         Button backButton = new Button("Kembali");
-    
+        backButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+
         addButton.setOnAction(e -> {
             String restaurantName = restaurantComboBox.getValue();
             String itemName = itemInput.getText();
@@ -151,9 +170,9 @@ public class AdminMenu extends MemberMenu {
             itemInput.clear();
             priceInput.clear();
         });
-    
+
         backButton.setOnAction(e -> stage.setScene(scene));
-    
+
         layout.getChildren().addAll(restaurantLabel, restaurantComboBox, itemLabel, itemInput, priceLabel, priceInput, addButton, backButton);
         return new Scene(layout, 400, 600);
     }
@@ -164,10 +183,16 @@ public class AdminMenu extends MemberMenu {
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
 
+        // Mengubah warna latar belakang VBox
+        layout.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+
         Label restaurantLabel = new Label("Restaurant Name:");
+        restaurantLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        restaurantLabel.setTextFill(Color.WHITE);
         TextField restaurantInput = new TextField();
 
         Button searchButton = new Button("Search");
+        searchButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         ListView<String> menuListView = new ListView<>();
 
         searchButton.setOnAction(e -> {
@@ -186,21 +211,22 @@ public class AdminMenu extends MemberMenu {
                                 return m1.getNamaMakanan().compareTo(m2.getNamaMakanan()); // If prices are equal, sort by name alphabetically
                             }
                         })
-                        .map(menu -> menu.getNamaMakanan() + " - R" + formatRupiah(menu.getHarga()))
+                        .map(menu -> menu.getNamaMakanan() + " - " + formatRupiah(menu.getHarga()))
                         .collect(Collectors.toList());
                 menuListView.setItems(FXCollections.observableArrayList(menuItems));
             } else {
                 menuListView.setItems(FXCollections.emptyObservableList());
                 showAlert("Restoran Tidak Ditemukan", "Kesalahan", "Restoran dengan nama '" + restaurantName + "' tidak ditemukan.", AlertType.ERROR);
             }
-            });
+        });
 
-            Button backButton = new Button("Kembali");
-            backButton.setOnAction(e -> stage.setScene(scene));
+        Button backButton = new Button("Kembali");
+        backButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+        backButton.setOnAction(e -> stage.setScene(scene));
 
-            layout.getChildren().addAll(restaurantLabel, restaurantInput, searchButton, menuListView, backButton);
+        layout.getChildren().addAll(restaurantLabel, restaurantInput, searchButton, menuListView, backButton);
 
-            return new Scene(layout, 400, 600);
+        return new Scene(layout, 400, 600);
     }
 
     // Method untuk memformat angka menjadi format mata uang
@@ -216,7 +242,7 @@ public class AdminMenu extends MemberMenu {
 
         return kursIndonesia.format(harga);
     }
-    
+
     // Method untuk menangani penambahan restoran
     private void handleTambahRestoran(String nama) {
         String validName = DepeFood.getValidRestaurantName(nama);

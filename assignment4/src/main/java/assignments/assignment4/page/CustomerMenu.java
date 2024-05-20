@@ -104,14 +104,23 @@ public class CustomerMenu extends MemberMenu {
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
 
+        // Mengubah warna latar belakang VBox
+        layout.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+
         Label restaurantLabel = new Label("Restoran:");
+        restaurantLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        restaurantLabel.setTextFill(Color.WHITE);
         layout.getChildren().add(restaurantLabel);
         layout.getChildren().add(restaurantComboBox);
 
         Label dateLabel = new Label("Tanggal Pemesanan (DD/MM/YYYY):");
+        dateLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        dateLabel.setTextFill(Color.WHITE);
         TextField dateInput = new TextField();
 
         Label menuItemsLabel = new Label("Menu Items:");
+        menuItemsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        menuItemsLabel.setTextFill(Color.WHITE);
         // Menggunakan ListView dengan SelectionMode.MULTIPLE
         ListView<String> menuItemsListView = new ListView<>();
         menuItemsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -119,7 +128,9 @@ public class CustomerMenu extends MemberMenu {
         restaurantComboBox.setOnAction(e -> populateMenuList(restaurantComboBox.getValue(), menuItemsListView));
 
         Button addButton = new Button("Tambah Pesanan");
+        addButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         Button backButton = new Button("Kembali");
+        backButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
 
         addButton.setOnAction(e -> {
             String restaurantName = restaurantComboBox.getValue();
@@ -159,14 +170,23 @@ public class CustomerMenu extends MemberMenu {
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
 
+        // Mengubah warna latar belakang VBox
+        layout.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+
         Label orderIdLabel = new Label("Order ID:");
+        orderIdLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        orderIdLabel.setTextFill(Color.WHITE);
         TextField orderIdInput = new TextField();
 
         Label paymentOptionLabel = new Label("Pilihan Pembayaran:");
+        paymentOptionLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        paymentOptionLabel.setTextFill(Color.WHITE);
         ComboBox<String> paymentOptionComboBox = new ComboBox<>(FXCollections.observableArrayList("Credit Card", "Debit"));
 
         Button payButton = new Button("Bayar");
+        payButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         Button backButton = new Button("Kembali");
+        backButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
 
         payButton.setOnAction(e -> {
             String orderId = orderIdInput.getText();
@@ -188,15 +208,23 @@ public class CustomerMenu extends MemberMenu {
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
 
-        refresh(); // Memuat ulang data dari DepeFood
+        // Mengubah warna latar belakang VBox
+        layout.setStyle("-fx-background-color: linear-gradient(to bottom right, #A5D6A7, #388E3C);");
+
+        refresh();
         User currentUser = DepeFood.getUserLoggedIn();
         String userName = currentUser.getNama();
         long userBalance = currentUser.getSaldo();
 
         Label nameLabel = new Label(userName);
-        saldoLabel = new Label("Saldo Anda: Rp" + userBalance); // Inisialisasi saldoLabel
+        nameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        nameLabel.setTextFill(Color.WHITE);
+        saldoLabel = new Label("Saldo Anda: Rp" + userBalance);
+        saldoLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        saldoLabel.setTextFill(Color.WHITE);
 
         Button backButton = new Button("Kembali");
+        backButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         backButton.setOnAction(e -> stage.setScene(scene));
 
         layout.getChildren().addAll(nameLabel, saldoLabel, backButton);
